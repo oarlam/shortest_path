@@ -16,6 +16,7 @@
 
 import osmnx as ox
 import networkx as nx
+print(5)
 
 # # Get the two ends of a street segment for a starting point
 # orig_node = list(G.nodes)[0]
@@ -28,3 +29,4 @@ import networkx as nx
 
 # # Visualize the route
 # fig, ax = ox.plot_graph_route(G, route, node_size=0, bgcolor='k')
+
