@@ -1,41 +1,3 @@
-# """DFS"""
-
-# import math
-
-# # Vertice : (coordinate of vertice, neighbours)
-# my_graph = {0: ((0,0),{1,2,3}), 1: ((1,1),{0,3}), 2: ((1,-1),{0,3}), 3: ((2,0),{0,1,2,4}), 4: ((3,0),{3})}
-
-# # def dfs(g, v) -> str:
-
-# def calc_distance(coord1, coord2):
-#     return math.sqrt((coord1[0]-coord2[0])**2 + (coord1[1]-coord2[1])**2)
-
-# def find_distances(graph: dict, target) -> dict:
-#     distances = {}
-
-#     for node in graph:
-#         node_coord = graph[node][0]
-#         target_coord = graph[target][0]
-#         distance = calc_distance(node_coord, target_coord)
-#         distances[node] = distance
-
-#     return distances
-
-
-# def greedy_algorithm(graph: dict, source: int, target: int):
-#     visited = set()
-#     distances = find_distances(graph, target)
-
-#     curr_node = source
-#     while curr_node != target:
-#         visited.add(curr_node)
-
-
-# greedy_algorithm(my_graph, 0, 4)
-
-# ABOVE ^^^^^^
-
-# BELOWE <<>>>
 """Dijkstra"""
 
 my_graph = {0: {1: 1, 2: 2, 3: 3}, 1: {0: 1, 3: 3}, 2: {0: 2, 3: 0.5}, 3: {0: 3, 1: 3, 2: 0.5, 4: 5}, 4: {3: 5}}
@@ -76,3 +38,40 @@ def dijkstra(graph: dict, source: int):
     return dist
 
 print(dijkstra(my_graph, 0))
+
+# """DFS"""
+
+# import math
+
+# # Vertice : (coordinate of vertice, neighbours)
+# my_graph = {0: ((0,0),{1,2,3}), 1: ((1,1),{0,3}), 2: ((1,-1),{0,3}), 3: ((2,0),{0,1,2,4}), 4: ((3,0),{3})}
+
+# # def dfs(g, v) -> str:
+
+# def calc_distance(coord1, coord2):
+#     return math.sqrt((coord1[0]-coord2[0])**2 + (coord1[1]-coord2[1])**2)
+
+# def find_distances(graph: dict, target) -> dict:
+#     distances = {}
+
+#     for node in graph:
+#         node_coord = graph[node][0]
+#         target_coord = graph[target][0]
+#         distance = calc_distance(node_coord, target_coord)
+#         distances[node] = distance
+
+#     return distances
+
+
+# def greedy_algorithm(graph: dict, source: int, target: int):
+#     visited = set()
+#     distances = find_distances(graph, target)
+
+#     curr_node = source
+#     while curr_node != target:
+#         visited.add(curr_node)
+
+
+# greedy_algorithm(my_graph, 0, 4)
+
+# ABOVE ^^^^^^
