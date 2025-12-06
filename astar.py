@@ -1,51 +1,82 @@
 import math
-# destination, road_length, x, y
-roads = {'a':{('b', 1), ('c', 2)},
-             'b': {('a', 0.9), ('d', 3.5)},
-             'c': {('d', 1.5), ('a', 2)},
-             'd': {('c', 1.5), ('b', 3.5)}
-}
-pos = {'a': (0, 0), 'b': (1, 1), 'c':(2.5, 4), 'd':(3.5, 4)}
+import osmnx as ox
 
-def potential(node_x, node_y, end_x, end_y):
-    return math.sqrt((node_x - end_x) ** 2 + (node_y - end_y) ** 2)
+def count_h_value(G, node_id: int, end_id: int) -> float:
+    '''
+    Calculates the Euclidean distance between the
+    current node and the end node on a planar projected graph.
 
-def a_star_method(all_roads, start, end):
-    h_start = potential(pos[start][0], pos[start][1], pos[end][0], pos[end][1])
-    values = {start: [0, h_start, h_start, None]}
-    open_set = [start]
-    closed_set = set()
-    while len(open_set) > 0:
-        open_set.sort(key = lambda x: values[x][2])
-        current_node = open_set.pop(0)
-        closed_set.add(current_node)
-        if current_node == end:
-            return values
-        for city, lenght in all_roads[current_node]:
-            if city in closed_set:
+    Parameters:
+    G: The projected graph containing node coordinates.
+    node_id: The unique ID of the current node.
+    end_id: The unique ID of the goal node.
+
+    Returns:
+    float: The straight-line distance between the two nodes.
+    '''
+    node = G.nodes[node_id]
+    end = G.nodes[end_id]
+    return math.sqrt((node['x'] - node['y']) ** 2 + (end['x'] - end['y']) ** 2)
+
+def a_star_method(G, graph: dict, start_id: int, end_id: int) -> dict[dict]:
+    """
+    Performs an A-star algoritm and returns all required data to build a path
+
+    Function uses A-star algorithm to find the shortest path
+
+    :param G: Graph created with osmnx library, on which we find this path
+    :param graph: Dictionary with all the nodes
+    :param start_id: Source node from which we start
+    :param end_id: Target node which we look for
+    :return: Dictionary with distances and parents
+    """
+    # Format:  {node_id : {g_value: , f_value: , parent: }}
+    nodes_info = {start_id: {'g_value' : 0, 'f_value' : 0, 'parent': None}}
+    queque = [start_id]
+    checked = set()
+
+    while len(queque) > 0:
+        queque.sort(key = lambda x: nodes_info[x]['f_value'])
+        current_node = queque.pop(0)
+        checked.add(current_node)
+        if current_node == end_id:
+            return nodes_info
+        neighbours = graph[current_node]
+        for node in neighbours:
+            if node in checked:
                 continue
-            g_value = values[current_node][0] + lenght
-            h_value = potential(pos[city][0], pos[city][1], pos[end][0], pos[end][1])
-            distance = g_value + h_value
-            if city not in open_set:
-                open_set += [city]
-                values[city] = [g_value, h_value, distance, current_node]
-            elif city in open_set and values[city][2] > distance:
-                values[city] = [g_value, h_value, distance, current_node]
+            distance = neighbours[node]
+            g_value = nodes_info[current_node]['g_value'] + distance
+            f_value = g_value + count_h_value(G, start_id, end_id)
+            if node not in queque or \
+            (node in queque and nodes_info[node]['f_value'] > f_value):
+                nodes_info[node] = {'g_value': g_value, 'f_value': f_value, 'parent': current_node}
+                if node not in queque:
+                    queque += [node]
 
+def get_path_for_astar(nodes_info: dict, start_id: int, end_id: int) -> tuple[list, float]:
+    '''
+    Reconstructs the shortest path found by the A* search algorithm and
+    returns its total length.
 
-s = 'a'
-e = 'd'
-steps = a_star_method(roads, s, e)
+    The function works by backtracking from the goal node to the start node
+    using the 'parent' pointers stored during the search.
+    Parameters:
+    nodes_info (dict): A dictionary containing the 'g_value' and 'parent' of each node.
+    start_id (int): ID of the starting node.
+    end_id (int): ID of the goal node.
 
-def get_path(values, start, end):
-    distance = values[end][0]
-    path = [end]
-    node = end
+    Returns:
+    A tuple containing:
+        list: The sequence of node IDs representing the shortest path,
+            starting from 'start_id' and ending at 'end_id'.
+        float: The lenght of the shortest path from the start to the end node.
+    '''
+    distance = nodes_info[end_id]['g_value']
+    path = [end_id]
+    node = end_id
     while True:
-        node = values[node][3]
+        node = nodes_info[node]['parent']
         path += [node]
-        if node == start:
+        if node == start_id:
             return path[::-1], distance
-
-print(get_path(steps, s, e))
