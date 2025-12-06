@@ -273,6 +273,7 @@ if __name__ == "__main__":
     print("------------------")
     print("A* result:")
     steps = greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333)
-    print(get_path_for_astar(steps, 13253800858, 11614899333)
+    print(get_path_for_astar(steps, 13253800858, 11614899333))
+
 
 
