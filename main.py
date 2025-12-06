@@ -263,14 +263,16 @@ def get_path_for_astar(nodes_info: dict, start_id: int, end_id: int) -> tuple[li
             return path[::-1], distance
 
 if __name__ == "__main__":
-    my_graph = load_data("Дніпро")[0]
+    my_graph, osmnx_graph = load_data("Дніпро")
     print("------------------")
     print("Dijkstra result:")
     print(dijkstra_algorithm(my_graph, 13253800858, 11614899333))
     print("------------------")
     print("Greedy result:")
-    print(greedy_algorithm(load_data("Дніпро"), 13253800858, 11614899333))
+    print(greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333))
     print("------------------")
     print("A* result:")
-    
+    steps = greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333)
+    print(get_path_for_astar(steps, 13253800858, 11614899333)
+
 
