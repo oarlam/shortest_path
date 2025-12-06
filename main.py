@@ -183,6 +183,7 @@ key=lambda n: distance_between_points(*get_coordinates(graph, n), goal_x, goal_y
         current_node = next_node
     return (path, final_length / 1000)
 
+#~~~~~~~~~~~~A~STAR~~~~~~~~~~~~~~~~~
 def count_h_value(G, node_id: int, end_id: int) -> float:
     '''
     Calculates the Euclidean distance between the
@@ -274,6 +275,7 @@ if __name__ == "__main__":
     print("A* result:")
     steps = greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333)
     print(get_path_for_astar(steps, 13253800858, 11614899333))
+
 
 
 
