@@ -74,9 +74,24 @@
 ## Як запустити
 
 1. Встановіть необхідні бібліотеки:
-  pip install osmnx networkx matplotlib
-2. Запустіть програму через термінал:
-  python main.py
+  pip(або pip3) install osmnx networkx matplotlib
+2. Запустіть програму одним із двох способів:
+
+Варіант А: Інтерактивний режим 
+Просто запустіть файл, і програма сама запитає у вас міста:
+python main.py
+
+Варіант Б: Ви можете передати параметри відразу при запуску (завдяки argparse):
+
+python main.py --start "Kyiv, Ukraine" --end "Lviv, Ukraine" --algo dijkstra
+
+Доступні аргументи:
+
+--start: Місто відправлення
+
+--end: Місто призначення
+
+--algo: Алгоритм (dijkstra, astar, greedy)
 
 ---
 
