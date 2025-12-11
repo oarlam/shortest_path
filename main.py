@@ -321,11 +321,12 @@ if __name__ == "__main__":
     print(dijkstra_algorithm(my_graph, 13253800858, 11614899333))
     print("------------------")
     print("Greedy result:")
-    print(greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333))
+    print(greedy_algorithm((my_graph, osmnx_graph), 13253800858, 11614899333))
     print("------------------")
     print("A* result:")
-    steps = greedy_algorithm(my_graph, osmnx_graph, 13253800858, 11614899333)
+    steps = greedy_algorithm((my_graph, osmnx_graph), 13253800858, 11614899333)
     print(get_path_for_astar(steps, 13253800858, 11614899333))
+
 
 
 
