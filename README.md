@@ -75,17 +75,19 @@
 
 ## Як запустити
 
-Запустіть програму завдяки argparse:
+Запустіть програму завдяки командному рядку:
 
-python main.py --start "Kyiv, Ukraine" --end "Lviv, Ukraine" --algo dijkstra
+ПРИКЛАД:
+main.py ver.osm 1626441717 194642380
+main.py ukr.osm 13303144410 9234835203
 
-Доступні аргументи:
+Аргументи:
 
---file: Path to file from which we load map
+file: Path to file from which we load map
 
---source: ID of source node from which we start the search
+source: ID of source node from which we start the search
 
---target: ID of target node
+target: ID of target node
 
 ---
 
