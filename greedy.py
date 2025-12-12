@@ -1,6 +1,27 @@
 """Greedy Algorithm"""
 
 import math
+import osmnx as ox
+
+def load_data(path: str):
+    """
+    Loads a road network graph from a file and converts it into a dictionary representation
+
+    :param path: Path to the file from which we load the map
+    """
+    print(f"Loading map: {path} ...")
+
+    graph = ox.graph_from_xml(path)
+    graph_dict = {node: {} for node in graph.nodes()}
+
+    for u, v, data in graph.edges(data=True):
+        graph_dict[u][v] = data.get('length', 1)
+
+    print("Done loading.")
+
+    print(graph_dict)
+
+    return graph_dict, graph
 
 def get_coordinates(graph: dict, node_id: int) -> tuple:
     """
@@ -57,30 +78,46 @@ def greedy_algorithm(values: tuple, start: int, goal: int) -> tuple:
     """
     # previous = start
     graph_dict, graph = values
+
     current_node = start
-    visited = {start}
     path = [start]
+    visited = {start}
     final_length = []
+    dead_ends = set()
+
+    goal_x, goal_y = get_coordinates(graph, goal)
+
     while current_node != goal:
-        neighbours = graph_dict[current_node]
-        candidates = [n for n in neighbours if n not in visited]
-        # if candidates:
-            # print(candidates)
+        neighbours = graph_dict.get(current_node, {})
+
+        candidates = [
+            n for n in neighbours
+            if n not in visited and n not in dead_ends
+        ]
+
         if not candidates:
-            final_length.pop(-1)
-            path.pop(-1)
-            current_node = path.pop(-1)
+            dead_ends.add(current_node)
+
+            if len(path) == 1:
+                return None, None
+
+            path.pop()
+            if final_length:
+                final_length.pop()
+            current_node = path[-1]
             continue
+        next_node = min(
+            candidates,
+            key=lambda n: distance_between_points(
+                *get_coordinates(graph, n),
+                goal_x,
+                goal_y
+            )
+        )
 
-        goal_x, goal_y = get_coordinates(graph, goal)
-        next_node = min(candidates,
-key=lambda n: distance_between_points(*get_coordinates(graph, n), goal_x, goal_y))
-        #бере той елемент, у якого мінімальне значення distance
-
-        final_length += [graph_dict[current_node][next_node]]
+        final_length.append(neighbours[next_node])
         path.append(next_node)
         visited.add(next_node)
-        # previous = current_node
         current_node = next_node
 
-    return (path, sum(final_length))
+    return path, sum(final_length)
