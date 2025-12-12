@@ -97,13 +97,17 @@ def main(path: str, start_id: int, end_id: int):
         print("A* did not find a path.")
 
     # Greedy
-    time_g = time.time()
-    path_g, dist_g = greedy.greedy_algorithm((graph_dict, graph), start_id, end_id)
-    time_g = time.time() - time_g
-    if path_g:
-        print(f"Greedy Path: {dist_g/1000:.3f} km, nodes: {len(path_g)}, time: {time_g:.3f} s")
-    else:
-        print("Greedy failed (got stuck).")
+    try:
+        time_g = time.time()
+        path_g, dist_g = greedy.greedy_algorithm((graph_dict, graph), start_id, end_id)
+        time_g = time.time() - time_g
+        if path_g:
+            print(f"Greedy Path: {dist_g/1000:.3f} km, nodes: {len(path_g)}, time: {time_g:.3f} s")
+        else:
+            print("Greedy failed (got stuck).")
+    except IndexError:
+        path_g = []
+        print("Greedy failed")
 
     # Dijkstra
 
