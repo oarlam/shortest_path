@@ -11,7 +11,9 @@
 
 ## Покликання на карти використані в роботі:
 
-https://drive.google.com/drive/folders/1a4F87ysrcaJibsVb0k-fQRpPWvD0QQgn?usp=drive_link
+https://drive.google.com/drive/folders/1a4F87ysrcaJibsVb0k-fQRpPWvD0QQgn?usp=drive_link 
+
+(Також за покликанням можна знайти файл testing.py, за допомогою якого зручно отримувати ID міст)
 
 ---
 
